@@ -1,0 +1,41 @@
+apply plugin: 'war'
+apply plugin: 'cargo'
+
+buildscript {
+  repositories {
+    mavenCentral()
+  }
+
+  dependencies {
+    classpath 'org.gradle.api.plugins:gradle-cargo-plugin:0.5.7'
+  }
+}
+
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+	compile 'javax.servlet:servlet-api:2.5'
+}
+
+// Cargo Plugin Config
+dependencies {
+  def cargoVersion = '1.2.2'
+  cargo "org.codehaus.cargo:cargo-core-uberjar:$cargoVersion",
+        "org.codehaus.cargo:cargo-ant:$cargoVersion"
+}
+
+cargo {
+    containerId = 'jetty7x'
+    port = 9090
+
+    local {
+        installer {
+            installUrl = "file:///$projectDir/zips/jetty-distribution-7.6.9.v20130131.zip"
+            downloadDir = file("$buildDir/download")
+            extractDir = file("$buildDir/extract")
+        }
+    }
+}
